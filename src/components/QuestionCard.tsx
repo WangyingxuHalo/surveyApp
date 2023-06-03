@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styles from "./QuestionCard.module.scss";
-import { Space, Button, Divider, Tag, Popconfirm, Modal, message } from "antd";
+import { Space, Button, Divider, Tag, Modal, message } from "antd";
 import {
   CopyOutlined,
   DeleteOutlined,

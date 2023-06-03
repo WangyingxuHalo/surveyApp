@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Space, Typography, Form, Input, Checkbox, Button } from "antd";
 import styles from "./Register.module.scss";
 import { UserAddOutlined } from "@ant-design/icons";
@@ -7,11 +7,42 @@ import { LOGIN_PATHNAME, REGISTER_PATHNAME } from "../router";
 
 const { Title } = Typography;
 
+const USERNAME_KEY = "USERNAME";
+const PASSWORD_KEY = "PASSWORD";
+
+const rememberUser = (username: string, password: string) => {
+  localStorage.setItem(USERNAME_KEY, username);
+  localStorage.setItem(PASSWORD_KEY, password);
+};
+
+const deleteUser = () => {
+  localStorage.removeItem(USERNAME_KEY);
+  localStorage.removeItem(PASSWORD_KEY);
+};
+
+const getUserInfoFromStorage = () => {
+  return {
+    username: localStorage.getItem(USERNAME_KEY),
+    password: localStorage.getItem(PASSWORD_KEY),
+  };
+};
+
 const Login: FC = () => {
   const nav = useNavigate();
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    const { username, password } = getUserInfoFromStorage();
+    form.setFieldsValue({ username, password });
+  }, []);
 
   const onSubmit = (values: any) => {
-    console.log(values);
+    const { username, password, remember } = values || {};
+    if (remember) {
+      rememberUser(username, password);
+    } else {
+      deleteUser();
+    }
   };
 
   const onSubmitFailed = (values: any) => {
@@ -31,6 +62,7 @@ const Login: FC = () => {
         </div>
         <div>
           <Form
+            form={form}
             name="basic"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 16 }}
@@ -43,7 +75,19 @@ const Login: FC = () => {
             <Form.Item
               label="用户名"
               name="username"
-              rules={[{ required: true, message: "请输入你的用户名!" }]}
+              rules={[
+                { required: true, message: "请输入你的用户名!" },
+                {
+                  type: "string",
+                  min: 5,
+                  max: 20,
+                  message: "用户名长度需在5-20之间",
+                },
+                {
+                  pattern: /^\w+$/,
+                  message: "只能是字母数字下划线",
+                },
+              ]}
             >
               <Input />
             </Form.Item>

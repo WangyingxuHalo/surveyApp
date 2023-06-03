@@ -1,5 +1,4 @@
 import React, { FC, useState } from "react";
-
 import {
   Typography,
   Empty,
@@ -9,48 +8,16 @@ import {
   Space,
   Modal,
   message,
+  Spin,
 } from "antd";
 import styles from "./Common.module.scss";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import ListSearch from "../../components/ListSearch";
+import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
 
 const { Title } = Typography;
 const { confirm } = Modal;
 
-const rawQuestionList = [
-  {
-    _id: "q1",
-    title: "问卷1",
-    isPublished: true,
-    isStar: false,
-    answerCount: 5,
-    createdAt: "3月10日13点23分",
-  },
-  {
-    _id: "q2",
-    title: "问卷2",
-    isPublished: false,
-    isStar: true,
-    answerCount: 8,
-    createdAt: "3月12日15点23分",
-  },
-  {
-    _id: "q3",
-    title: "问卷3",
-    isPublished: true,
-    isStar: false,
-    answerCount: 2,
-    createdAt: "3月14日17点23分",
-  },
-  {
-    _id: "q4",
-    title: "问卷4",
-    isPublished: false,
-    isStar: false,
-    answerCount: 4,
-    createdAt: "3月16日19点23分",
-  },
-];
 const tableColumns = [
   {
     title: "标题",
@@ -82,7 +49,12 @@ const tableColumns = [
 ];
 
 const Trash: FC = () => {
-  const [questionList, setQuestionList] = useState(rawQuestionList);
+  const {
+    loading,
+    data = {},
+    error,
+  } = useLoadQuestionListData({ isDeleted: true });
+  const { list: questionList = [], total = 0 } = data;
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleDelete = () => {
@@ -136,8 +108,15 @@ const Trash: FC = () => {
         </div>
       </div>
       <div className={styles.content}>
-        {questionList.length === 0 && <Empty description="暂无数据" />}
-        {questionList.length > 0 && TableElem}
+        {loading && (
+          <div style={{ textAlign: "center" }}>
+            <Spin />
+          </div>
+        )}
+        {!loading && questionList.length === 0 && (
+          <Empty description="暂无数据" />
+        )}
+        {!loading && questionList.length > 0 && TableElem}
       </div>
     </>
   );

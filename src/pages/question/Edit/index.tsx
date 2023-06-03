@@ -1,10 +1,15 @@
 import React, { FC } from "react";
-import { useParams } from "react-router-dom";
+import useLoadQuestionData from "../../../hooks/useLoadQuestionData";
 
 const Edit: FC = () => {
-  const { id = "" } = useParams();
-
-  return <p>Edit {id}</p>;
+  const { loading, data, error } = useLoadQuestionData();
+  return (
+    <div>
+      <p>Edit page</p>
+      {loading ? <p>loading</p> : <p>finish loading</p>}
+      <div>{JSON.stringify(data)}</div>
+    </div>
+  );
 };
 
 export default Edit;
