@@ -14,6 +14,7 @@ import styles from "./Common.module.scss";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import ListSearch from "../../components/ListSearch";
 import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
+import ListPage from "../../components/ListPage";
 
 const { Title } = Typography;
 const { confirm } = Modal;
@@ -117,6 +118,9 @@ const Trash: FC = () => {
           <Empty description="暂无数据" />
         )}
         {!loading && questionList.length > 0 && TableElem}
+      </div>
+      <div className={styles.footer}>
+        <ListPage total={total} />
       </div>
     </>
   );
