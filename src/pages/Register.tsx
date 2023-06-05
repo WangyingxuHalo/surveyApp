@@ -1,15 +1,40 @@
 import React, { FC } from "react";
-import { Space, Typography, Form, Input, Checkbox, Button } from "antd";
+import {
+  Space,
+  Typography,
+  Form,
+  Input,
+  Checkbox,
+  Button,
+  message,
+} from "antd";
 import styles from "./Register.module.scss";
 import { UserAddOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LOGIN_PATHNAME } from "../router";
+import { useRequest } from "ahooks";
+import { registerService } from "../services/user";
 
 const { Title } = Typography;
 
 const Register: FC = () => {
+  const nav = useNavigate();
+  const { run: registerSubmit, loading: registerLoading } = useRequest(
+    async (values) => {
+      const { username, password, nickname } = values;
+      await registerService(username, password, nickname);
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("注册成功");
+        nav(LOGIN_PATHNAME);
+      },
+    }
+  );
+
   const onSubmit = (values: any) => {
-    console.log(values);
+    registerSubmit(values);
   };
 
   const onSubmitFailed = (values: any) => {
@@ -95,7 +120,11 @@ const Register: FC = () => {
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Space>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={registerLoading}
+              >
                 注册
               </Button>
               <Link to={LOGIN_PATHNAME}>已有账号?登陆</Link>

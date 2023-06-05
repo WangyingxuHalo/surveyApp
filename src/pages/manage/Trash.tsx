@@ -15,6 +15,11 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import ListSearch from "../../components/ListSearch";
 import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
 import ListPage from "../../components/ListPage";
+import { useRequest } from "ahooks";
+import {
+  deleteQuestionService,
+  updateQuestionService,
+} from "../../services/question";
 
 const { Title } = Typography;
 const { confirm } = Modal;
@@ -53,17 +58,61 @@ const Trash: FC = () => {
   const {
     loading,
     data = {},
-    error,
+    refresh,
   } = useLoadQuestionListData({ isDeleted: true });
   const { list: questionList = [], total = 0 } = data;
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+  const { run: recoverSurvey } = useRequest(
+    async () => {
+      for await (const id of selectedIds) {
+        await updateQuestionService(id, { isDeleted: false });
+      }
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("恢复成功");
+        refresh();
+        setSelectedIds([]);
+      },
+    }
+  );
+
+  const { run: deleteSurvey } = useRequest(
+    async () => {
+      const data = await deleteQuestionService(selectedIds);
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("删除成功");
+        refresh();
+        setSelectedIds([]);
+      },
+    }
+  );
+
+  const handleRecover = () => {
+    confirm({
+      title: "确认恢复所有选中问卷?",
+      icon: <ExclamationCircleOutlined />,
+      content: "选中问卷将从回收站中恢复",
+      onOk: () => {
+        recoverSurvey();
+      },
+    });
+  };
+
   const handleDelete = () => {
     confirm({
-      title: "确认删除该问卷?",
+      title: "确认删除所有选中问卷?",
       icon: <ExclamationCircleOutlined />,
       content: "删除以后无法找回",
-      onOk: () => message.success("删除成功"),
+      onOk: () => {
+        deleteSurvey();
+      },
     });
   };
 
@@ -71,7 +120,11 @@ const Trash: FC = () => {
     <>
       <div style={{ marginBottom: "16px" }}>
         <Space>
-          <Button type="primary" disabled={selectedIds.length === 0}>
+          <Button
+            type="primary"
+            disabled={selectedIds.length === 0}
+            onClick={handleRecover}
+          >
             恢复
           </Button>
           <Button

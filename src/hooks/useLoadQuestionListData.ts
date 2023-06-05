@@ -32,11 +32,11 @@ function useLoadQuestionListData(opt: Partial<OptionType>) {
     });
     return data;
   }
-  const { data, loading, error } = useRequest(loadAllList, {
+  const { data, loading, error, refresh } = useRequest(loadAllList, {
     refreshDeps: [searchParams],
   });
 
-  return { data, loading, error };
+  return { data, loading, error, refresh };
 }
 
 export default useLoadQuestionListData;

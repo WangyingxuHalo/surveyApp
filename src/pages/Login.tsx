@@ -1,9 +1,20 @@
 import React, { FC, useEffect } from "react";
-import { Space, Typography, Form, Input, Checkbox, Button } from "antd";
+import {
+  Space,
+  Typography,
+  Form,
+  Input,
+  Checkbox,
+  Button,
+  message,
+} from "antd";
 import styles from "./Register.module.scss";
 import { UserAddOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { LOGIN_PATHNAME, REGISTER_PATHNAME } from "../router";
+import { LIST_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME } from "../router";
+import { useRequest } from "ahooks";
+import { loginService } from "../services/user";
+import { setToken } from "../utils/user-token";
 
 const { Title } = Typography;
 
@@ -31,6 +42,23 @@ const Login: FC = () => {
   const nav = useNavigate();
   const [form] = Form.useForm();
 
+  const { run: loginSubmit, loading: loginLoading } = useRequest(
+    async (username: string, password: string) => {
+      const data = await loginService(username, password);
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess(result) {
+        console.log("result: ", result);
+        const { token = "" } = result;
+        setToken(token);
+        message.success("登录成功");
+        nav(LIST_PATHNAME);
+      },
+    }
+  );
+
   useEffect(() => {
     const { username, password } = getUserInfoFromStorage();
     form.setFieldsValue({ username, password });
@@ -43,6 +71,7 @@ const Login: FC = () => {
     } else {
       deleteUser();
     }
+    loginSubmit(username, password);
   };
 
   const onSubmitFailed = (values: any) => {
@@ -110,7 +139,11 @@ const Login: FC = () => {
 
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
               <Space>
-                <Button type="primary" htmlType="submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  disabled={loginLoading}
+                >
                   登录
                 </Button>
                 <Link to={REGISTER_PATHNAME}>没有账号?注册</Link>

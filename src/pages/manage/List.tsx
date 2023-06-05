@@ -3,7 +3,6 @@ import styles from "./Common.module.scss";
 import QuestionCard from "../../components/QuestionCard";
 import { Spin, Typography, Empty } from "antd";
 import ListSearch from "../../components/ListSearch";
-import useLoadQuestionListData from "../../hooks/useLoadQuestionListData";
 import { getQuestionListService } from "../../services/question";
 import { useSearchParams } from "react-router-dom";
 import { useDebounceFn, useRequest } from "ahooks";

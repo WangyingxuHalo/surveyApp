@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styles from "./QuestionCard.module.scss";
 import { Space, Button, Divider, Tag, Modal, message } from "antd";
 import {
@@ -11,6 +11,11 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { QUESTION_EDIT_PATHNAME, QUESTION_STAT_PATHNAME } from "../router";
+import {
+  duplicateQuestionService,
+  updateQuestionService,
+} from "../services/question";
+import { useRequest } from "ahooks";
 
 const { confirm } = Modal;
 
@@ -27,6 +32,53 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
   const nav = useNavigate();
   const { _id, title, isPublished, isStar, answerCount, createdAt } = props;
 
+  const [isStarState, setIsStarState] = useState(isStar);
+  const [isDeletedState, setIsDeletedState] = useState(false);
+
+  const { run: updateStar, loading: updateStarLoading } = useRequest(
+    async () => {
+      const data = await updateQuestionService(_id, {
+        isStar: !isStarState,
+      });
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess() {
+        setIsStarState(!isStarState);
+        message.success("更新成功");
+      },
+    }
+  );
+
+  const { loading: duplicateLoading, run: duplicateSurvey } = useRequest(
+    async () => {
+      const data = await duplicateQuestionService(_id);
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess(result) {
+        message.success("复制成功");
+        nav(`${QUESTION_EDIT_PATHNAME}/${result.id}`);
+      },
+    }
+  );
+
+  const { loading: deleteLoading, run: deleteSurvey } = useRequest(
+    async () => {
+      const data = await updateQuestionService(_id, { isDeleted: true });
+      return data;
+    },
+    {
+      manual: true,
+      onSuccess() {
+        message.success("删除成功");
+        setIsDeletedState(true);
+      },
+    }
+  );
+
   const handleClickEdit = () => {
     const nav_link = `${QUESTION_EDIT_PATHNAME}/${_id}`;
     nav(nav_link);
@@ -41,7 +93,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
     confirm({
       title: "确定复制该问卷?",
       icon: <ExclamationCircleOutlined />,
-      onOk: () => message.success("复制成功"),
+      onOk: () => duplicateSurvey(),
     });
   };
 
@@ -49,9 +101,13 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
     confirm({
       title: "确定删除该问卷?",
       icon: <ExclamationCircleOutlined />,
-      onOk: () => message.success("删除成功"),
+      onOk: () => deleteSurvey(),
     });
   };
+
+  if (isDeletedState) {
+    return null;
+  }
 
   return (
     <>
@@ -66,7 +122,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
               }
             >
               <Space>
-                {isStar && <StarOutlined style={{ color: "red" }} />}
+                {isStarState && <StarOutlined style={{ color: "red" }} />}
                 {title}
               </Space>
             </Link>
@@ -108,14 +164,21 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
           </div>
           <div className={styles.right}>
             <Space>
-              <Button icon={<StarOutlined />} type="text" size="small">
-                {isStar ? "取消标星" : "标星"}
+              <Button
+                icon={<StarOutlined />}
+                type="text"
+                size="small"
+                onClick={updateStar}
+                disabled={updateStarLoading}
+              >
+                {isStarState ? "取消标星" : "标星"}
               </Button>
               <Button
                 icon={<CopyOutlined />}
                 type="text"
                 size="small"
                 onClick={handleDuplicate}
+                disabled={duplicateLoading}
               >
                 复制
               </Button>
@@ -125,6 +188,7 @@ const QuestionCard: FC<PropsType> = (props: PropsType) => {
                 type="text"
                 size="small"
                 onClick={handleDelete}
+                disabled={deleteLoading}
               >
                 删除
               </Button>

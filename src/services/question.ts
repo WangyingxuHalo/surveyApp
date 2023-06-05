@@ -31,3 +31,31 @@ export async function getQuestionListService(
   const data = (await axios.get(url, { params: opt })) as ResDataType;
   return data;
 }
+
+// Enable users to star a survey
+export async function updateQuestionService(
+  id: string,
+  opt: { [key: string]: any }
+): Promise<ResDataType> {
+  const url = `/api/question/${id}`;
+  const data = (await axios.patch(url, opt)) as ResDataType;
+  return data;
+}
+
+// Duplicate survey
+export async function duplicateQuestionService(
+  id: string
+): Promise<ResDataType> {
+  const url = `/api/question/duplicate/${id}`;
+  const data = (await axios.post(url)) as ResDataType;
+  return data;
+}
+
+// Delete a list of surveys
+export async function deleteQuestionService(
+  ids: string[]
+): Promise<ResDataType> {
+  const url = "/api/question";
+  const data = (await axios.delete(url), { data: ids }) as ResDataType;
+  return data;
+}
