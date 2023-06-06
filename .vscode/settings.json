@@ -8,6 +8,7 @@
         "immer",
         "mockjs",
         "Popconfirm",
+        "reduxjs",
         "Yingxu"
     ]
 }

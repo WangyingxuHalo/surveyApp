@@ -84,3 +84,19 @@ export const STAR_PATHNAME = "/manage/star";
 export const TRASH_PATHNAME = "/manage/trash";
 export const QUESTION_EDIT_PATHNAME = "/question/edit";
 export const QUESTION_STAT_PATHNAME = "/question/stat";
+
+// is login page or register page
+export function isLoginOrRegister(pathname: string) {
+  if ([LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) {
+    return true;
+  }
+  return false;
+}
+
+// can access without login
+export function noNeedLogin(pathname: string) {
+  if ([HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) {
+    return true;
+  }
+  return false;
+}
