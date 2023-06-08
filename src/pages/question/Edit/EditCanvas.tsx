@@ -9,6 +9,7 @@ import {
 } from "../../../store/componentsReducer";
 import { useDispatch } from "react-redux";
 import classNames from "classnames";
+import useBindCanvasKeyPress from "../../../hooks/useBindCanvasKeyPress";
 
 type PropsType = {
   loading: boolean;
@@ -32,31 +33,37 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
     dispatch(changeSelectedId(id));
   };
 
+  useBindCanvasKeyPress();
+
   if (loading) {
     return <Spin />;
   }
   return (
     <div className={styles.canvas}>
-      {componentList.map((component) => {
-        const { fe_id } = component;
+      {componentList
+        .filter((c) => !c.isHidden)
+        .map((component) => {
+          const { fe_id, isLocked } = component;
 
-        const wrapperDefaultClassName = styles["component-wrapper"];
-        const selectedClassName = styles.selected;
-        const wrapperClassName = classNames({
-          [wrapperDefaultClassName]: true,
-          [selectedClassName]: selectedId === fe_id, // selectedId == fe_id?
-        });
+          const wrapperDefaultClassName = styles["component-wrapper"];
+          const selectedClassName = styles.selected;
+          const lockedClassName = styles.locked;
+          const wrapperClassName = classNames({
+            [wrapperDefaultClassName]: true,
+            [selectedClassName]: selectedId === fe_id, // selectedId == fe_id?
+            [lockedClassName]: isLocked,
+          });
 
-        return (
-          <div
-            key={fe_id}
-            className={wrapperClassName}
-            onClick={(e) => handelClick(e, fe_id)}
-          >
-            <div className={styles.component}>{genComponent(component)}</div>
-          </div>
-        );
-      })}
+          return (
+            <div
+              key={fe_id}
+              className={wrapperClassName}
+              onClick={(e) => handelClick(e, fe_id)}
+            >
+              <div className={styles.component}>{genComponent(component)}</div>
+            </div>
+          );
+        })}
     </div>
   );
 };

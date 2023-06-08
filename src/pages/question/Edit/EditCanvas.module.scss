@@ -6,7 +6,7 @@
 
 .component-wrapper {
     margin: 12px;
-    border: 12px solid #fff;
+    border: 5px solid #fff;
     padding: 12px;
     border-radius: 3px;
 
@@ -22,4 +22,9 @@
 
 .selected {
     border-color: #1890ff !important;
+}
+
+.locked {
+    opacity: .5;
+    cursor: not-allowed;
 }
