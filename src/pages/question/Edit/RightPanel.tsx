@@ -1,12 +1,32 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Tabs } from "antd";
 import { FileTextOutlined, SettingOutlined } from "@ant-design/icons";
 import ComponentProp from "./ComponentProp";
+import PageSetting from "./PageSetting";
+import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
+
+enum TAB_KEYS {
+  PROP_KEY = "prop",
+  SETTING_KEY = "setting",
+}
 
 const RightPanel: FC = () => {
+  const [currActiveKey, setCurrActiveKey] = useState("");
+  const { selectedId } = useGetComponentInfo();
+
+  const handleTabClick = (keyToChange: string) => {
+    setCurrActiveKey(keyToChange);
+  };
+
+  useEffect(() => {
+    selectedId
+      ? setCurrActiveKey(TAB_KEYS.PROP_KEY)
+      : setCurrActiveKey(TAB_KEYS.SETTING_KEY);
+  }, [selectedId]);
+
   const tabItems = [
     {
-      key: "prop",
+      key: TAB_KEYS.PROP_KEY,
       label: (
         <span>
           <FileTextOutlined />
@@ -20,17 +40,27 @@ const RightPanel: FC = () => {
       ),
     },
     {
-      key: "setting",
+      key: TAB_KEYS.SETTING_KEY,
       label: (
         <span>
           <SettingOutlined />
           页面设置
         </span>
       ),
-      children: <div>页面设置</div>,
+      children: (
+        <div>
+          <PageSetting />
+        </div>
+      ),
     },
   ];
-  return <Tabs defaultActiveKey="prop" items={tabItems}></Tabs>;
+  return (
+    <Tabs
+      activeKey={currActiveKey}
+      items={tabItems}
+      onChange={handleTabClick}
+    ></Tabs>
+  );
 };
 
 export default RightPanel;

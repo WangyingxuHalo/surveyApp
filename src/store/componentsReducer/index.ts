@@ -26,7 +26,7 @@ const INIT_STATE: ComponentStateType = {
 };
 
 export const componentSlice = createSlice({
-  name: "count",
+  name: "component",
   initialState: INIT_STATE,
   reducers: {
     // update store with new component list

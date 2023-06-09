@@ -4,6 +4,7 @@ import { getQuestionService } from "../services/question";
 import { useRequest } from "ahooks";
 import { useDispatch } from "react-redux";
 import { resetComponents } from "../store/componentsReducer";
+import { resetPageInfo } from "../store/pageInfoReducer";
 
 function useLoadQuestionData() {
   const { id = "" } = useParams();
@@ -27,7 +28,7 @@ function useLoadQuestionData() {
     if (!data) {
       return;
     }
-    const { title, componentList } = data;
+    const { title, desc, js, css, componentList } = data;
     let selectedId = "";
     if (componentList.length > 0) {
       selectedId = componentList[0].fe_id;
@@ -36,6 +37,7 @@ function useLoadQuestionData() {
     dispatch(
       resetComponents({ componentList, selectedId, copiedComponent: null })
     );
+    dispatch(resetPageInfo({ title, desc, js, css }));
   }, [data]);
 
   // id changes => send ajax request to load survey data
