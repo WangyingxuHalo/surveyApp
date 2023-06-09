@@ -5,12 +5,22 @@ import QuestionParagraphConf, {
   QuestionParagraphPropsType,
 } from "./QuestionParagraph";
 import QuestionInfoConf, { QuestionInfoPropsType } from "./QuestionInfo";
+import QuestionTextareaConf, {
+  QuestionTextareaPropsType,
+} from "./QuestionTextarea";
+import QuestionRadioConf, { QuestionRadioPropsType } from "./QuestionRadio";
+import QuestionCheckboxConf, {
+  QuestionCheckboxPropsType,
+} from "./QuestionCheckbox";
 
 // props type of each component
 export type ComponentPropsType = QuestionInputPropsType &
   QuestionTitlePropsType &
   QuestionParagraphPropsType &
-  QuestionInfoPropsType;
+  QuestionInfoPropsType &
+  QuestionTextareaPropsType &
+  QuestionRadioPropsType &
+  QuestionCheckboxPropsType;
 
 // configuration for every component
 export type ComponentConfType = {
@@ -27,6 +37,9 @@ const componentConfList: ComponentConfType[] = [
   QuestionTitleConf,
   QuestionParagraphConf,
   QuestionInfoConf,
+  QuestionTextareaConf,
+  QuestionRadioConf,
+  QuestionCheckboxConf,
 ];
 
 // different groups
@@ -39,7 +52,12 @@ export const componentConfGroup = [
   {
     groupId: "inputGroup",
     groupName: "用户输入",
-    components: [QuestionInputConf],
+    components: [QuestionInputConf, QuestionTextareaConf],
+  },
+  {
+    groupId: "chooseGroup",
+    groupName: "用户选择",
+    components: [QuestionRadioConf, QuestionCheckboxConf],
   },
 ];
 

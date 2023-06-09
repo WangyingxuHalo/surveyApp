@@ -1,31 +1,32 @@
 import React, { FC, useEffect } from "react";
-import { QuestionInfoPropsType } from "./interface";
+import { QuestionTextareaPropsType } from "./interface";
 import { Form, Input } from "antd";
 
 const { TextArea } = Input;
 
-const PropComponent: FC<QuestionInfoPropsType> = (
-  props: QuestionInfoPropsType
+const PropComponent: FC<QuestionTextareaPropsType> = (
+  props: QuestionTextareaPropsType
 ) => {
-  const { title, description, onChange } = props;
+  const { title, placeholder, onChange, disabled = false } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({ title, description });
-  }, [title, description]);
+    form.setFieldsValue({ title, placeholder });
+  }, [title, placeholder]);
 
   const handleValuesChange = () => {
-    console.log(form.getFieldsValue());
     if (onChange) {
       onChange(form.getFieldsValue());
     }
   };
+
   return (
     <Form
       layout="vertical"
-      initialValues={{ title, description }}
       onValuesChange={handleValuesChange}
+      initialValues={{ title, placeholder }}
       form={form}
+      disabled={disabled}
     >
       <Form.Item
         label="标题"
@@ -34,7 +35,7 @@ const PropComponent: FC<QuestionInfoPropsType> = (
       >
         <Input />
       </Form.Item>
-      <Form.Item label="描述" name="description">
+      <Form.Item label="placeholder" name="placeholder">
         <TextArea />
       </Form.Item>
     </Form>

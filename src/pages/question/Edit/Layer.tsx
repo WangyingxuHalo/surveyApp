@@ -1,0 +1,118 @@
+import React, { ChangeEvent, FC, useState } from "react";
+import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
+import styles from "./Layer.module.scss";
+import classNames from "classnames";
+import { useDispatch } from "react-redux";
+import {
+  changeSelectedId,
+  changeTitleName,
+  changeComponentHiddenStatus,
+  toggleComponentLocked,
+} from "../../../store/componentsReducer";
+import { Input, message, Button, Space } from "antd";
+import { EyeInvisibleOutlined, LockOutlined } from "@ant-design/icons";
+
+const Layer: FC = () => {
+  const [changingTitleId, setChangingTitleId] = useState("");
+  const { componentList, selectedId } = useGetComponentInfo();
+  const dispatch = useDispatch();
+
+  const handleTitleClicked = (fe_id: string) => {
+    setChangingTitleId(fe_id);
+    const componentClicked = componentList.find(
+      (component) => component.fe_id === fe_id
+    );
+    // if select hidden component
+    if (componentClicked?.isHidden) {
+      message.info("选中了隐藏的组件");
+    }
+    // if select component already selected
+    if (componentClicked?.fe_id === selectedId) {
+      setChangingTitleId(fe_id);
+      return;
+    }
+    // select other component
+    dispatch(changeSelectedId(fe_id));
+    setChangingTitleId("");
+  };
+
+  // change title name
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value.trim();
+    if (!newValue) {
+      return;
+    }
+    if (!selectedId) {
+      return;
+    }
+    dispatch(changeTitleName({ fe_id: selectedId, newTitle: newValue }));
+  };
+
+  // change display or hidden
+  const handleChangeHidden = (fe_id: string, isHidden: boolean) => {
+    dispatch(changeComponentHiddenStatus({ fe_id, isHidden }));
+  };
+
+  // change lock or unlock
+  const handleChangeLock = (fe_id: string) => {
+    dispatch(toggleComponentLocked({ fe_id }));
+  };
+
+  return (
+    <>
+      {componentList.map((component) => {
+        const { fe_id, title, isHidden, isLocked } = component;
+        const itemClassName = classNames({
+          [styles.title]: true,
+          [styles.selected]: selectedId === fe_id,
+        });
+        return (
+          <div key={fe_id} className={styles.wrapper}>
+            <div
+              className={itemClassName}
+              onClick={() => {
+                handleTitleClicked(fe_id);
+              }}
+            >
+              {changingTitleId === fe_id && (
+                <Input
+                  value={title}
+                  onPressEnter={() => setChangingTitleId("")}
+                  onBlur={() => setChangingTitleId("")}
+                  onChange={handleInputChange}
+                />
+              )}
+              {changingTitleId !== fe_id && title}
+            </div>
+            <div className={styles.handler}>
+              <Space>
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={<EyeInvisibleOutlined />}
+                  type={isHidden ? "primary" : "text"}
+                  className={isHidden ? "" : styles.btn}
+                  onClick={() => {
+                    handleChangeHidden(fe_id, !isHidden);
+                  }}
+                ></Button>
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={<LockOutlined />}
+                  type={isLocked ? "primary" : "text"}
+                  className={isLocked ? "" : styles.btn}
+                  onClick={() => {
+                    handleChangeLock(fe_id);
+                  }}
+                ></Button>
+              </Space>
+            </div>
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+export default Layer;

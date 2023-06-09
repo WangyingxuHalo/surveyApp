@@ -196,6 +196,20 @@ export const componentSlice = createSlice({
       }
       state.selectedId = visibleComponentList[currIndexInVisibleList + 1].fe_id;
     },
+    // change title name of component
+    changeTitleName: (
+      state: ComponentStateType,
+      action: PayloadAction<{ fe_id: string; newTitle: string }>
+    ) => {
+      const { fe_id, newTitle } = action.payload;
+      const { componentList } = state;
+      const componentToChange = componentList.find(
+        (component) => component.fe_id === fe_id
+      );
+      if (componentToChange) {
+        componentToChange.title = newTitle;
+      }
+    },
   },
 });
 
@@ -211,6 +225,7 @@ export const {
   pasteComponent,
   selectPreviousComponent,
   selectNextComponent,
+  changeTitleName,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;
