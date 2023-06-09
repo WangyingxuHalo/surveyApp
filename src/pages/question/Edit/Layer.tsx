@@ -8,9 +8,12 @@ import {
   changeTitleName,
   changeComponentHiddenStatus,
   toggleComponentLocked,
+  moveComponentPosition,
 } from "../../../store/componentsReducer";
 import { Input, message, Button, Space } from "antd";
 import { EyeInvisibleOutlined, LockOutlined } from "@ant-design/icons";
+import SortableContainer from "../../../components/DragSortable/SortableContainer";
+import SortableItem from "../../../components/DragSortable/SortableItem";
 
 const Layer: FC = () => {
   const [changingTitleId, setChangingTitleId] = useState("");
@@ -58,8 +61,17 @@ const Layer: FC = () => {
     dispatch(toggleComponentLocked({ fe_id }));
   };
 
+  // need id for each item
+  const componentListWithId = componentList.map((component) => {
+    return { ...component, id: component.fe_id };
+  });
+
+  const handleDragEnd = (oldIndex: number, newIndex: number) => {
+    dispatch(moveComponentPosition({ oldIndex, newIndex }));
+  };
+
   return (
-    <>
+    <SortableContainer items={componentListWithId} onDragEnd={handleDragEnd}>
       {componentList.map((component) => {
         const { fe_id, title, isHidden, isLocked } = component;
         const itemClassName = classNames({
@@ -67,51 +79,53 @@ const Layer: FC = () => {
           [styles.selected]: selectedId === fe_id,
         });
         return (
-          <div key={fe_id} className={styles.wrapper}>
-            <div
-              className={itemClassName}
-              onClick={() => {
-                handleTitleClicked(fe_id);
-              }}
-            >
-              {changingTitleId === fe_id && (
-                <Input
-                  value={title}
-                  onPressEnter={() => setChangingTitleId("")}
-                  onBlur={() => setChangingTitleId("")}
-                  onChange={handleInputChange}
-                />
-              )}
-              {changingTitleId !== fe_id && title}
+          <SortableItem key={fe_id} id={fe_id}>
+            <div key={fe_id} className={styles.wrapper}>
+              <div
+                className={itemClassName}
+                onClick={() => {
+                  handleTitleClicked(fe_id);
+                }}
+              >
+                {changingTitleId === fe_id && (
+                  <Input
+                    value={title}
+                    onPressEnter={() => setChangingTitleId("")}
+                    onBlur={() => setChangingTitleId("")}
+                    onChange={handleInputChange}
+                  />
+                )}
+                {changingTitleId !== fe_id && title}
+              </div>
+              <div className={styles.handler}>
+                <Space>
+                  <Button
+                    size="small"
+                    shape="circle"
+                    icon={<EyeInvisibleOutlined />}
+                    type={isHidden ? "primary" : "text"}
+                    className={isHidden ? "" : styles.btn}
+                    onClick={() => {
+                      handleChangeHidden(fe_id, !isHidden);
+                    }}
+                  ></Button>
+                  <Button
+                    size="small"
+                    shape="circle"
+                    icon={<LockOutlined />}
+                    type={isLocked ? "primary" : "text"}
+                    className={isLocked ? "" : styles.btn}
+                    onClick={() => {
+                      handleChangeLock(fe_id);
+                    }}
+                  ></Button>
+                </Space>
+              </div>
             </div>
-            <div className={styles.handler}>
-              <Space>
-                <Button
-                  size="small"
-                  shape="circle"
-                  icon={<EyeInvisibleOutlined />}
-                  type={isHidden ? "primary" : "text"}
-                  className={isHidden ? "" : styles.btn}
-                  onClick={() => {
-                    handleChangeHidden(fe_id, !isHidden);
-                  }}
-                ></Button>
-                <Button
-                  size="small"
-                  shape="circle"
-                  icon={<LockOutlined />}
-                  type={isLocked ? "primary" : "text"}
-                  className={isLocked ? "" : styles.btn}
-                  onClick={() => {
-                    handleChangeLock(fe_id);
-                  }}
-                ></Button>
-              </Space>
-            </div>
-          </div>
+          </SortableItem>
         );
       })}
-    </>
+    </SortableContainer>
   );
 };
 

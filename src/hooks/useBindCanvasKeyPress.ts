@@ -19,6 +19,10 @@ function isActiveElementValid() {
   if (activeElement === document.body) {
     return true;
   }
+  // after add drag function, here it does not work. Therefore add this if-condition
+  if (activeElement?.matches(`div[role="button"]`)) {
+    return true;
+  }
   return false;
 }
 

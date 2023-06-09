@@ -210,6 +210,17 @@ export const componentSlice = createSlice({
         componentToChange.title = newTitle;
       }
     },
+    // move component position
+    moveComponentPosition: (
+      state: ComponentStateType,
+      action: PayloadAction<{ oldIndex: number; newIndex: number }>
+    ) => {
+      const { componentList } = state;
+      const { oldIndex, newIndex } = action.payload;
+      const elementToMove = componentList[oldIndex];
+      componentList.splice(oldIndex, 1);
+      componentList.splice(newIndex, 0, elementToMove);
+    },
   },
 });
 
@@ -226,6 +237,7 @@ export const {
   selectPreviousComponent,
   selectNextComponent,
   changeTitleName,
+  moveComponentPosition,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;
