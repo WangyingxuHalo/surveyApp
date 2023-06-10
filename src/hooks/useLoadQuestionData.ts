@@ -5,6 +5,7 @@ import { useRequest } from "ahooks";
 import { useDispatch } from "react-redux";
 import { resetComponents } from "../store/componentsReducer";
 import { resetPageInfo } from "../store/pageInfoReducer";
+import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 function useLoadQuestionData() {
   const { id = "" } = useParams();
@@ -37,6 +38,7 @@ function useLoadQuestionData() {
     dispatch(
       resetComponents({ componentList, selectedId, copiedComponent: null })
     );
+    dispatch(UndoActionCreators.clearHistory());
     dispatch(resetPageInfo({ title, desc, js, css }));
   }, [data]);
 

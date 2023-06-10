@@ -12,6 +12,7 @@
         "mockjs",
         "Popconfirm",
         "reduxjs",
+        "undoable",
         "uparrow",
         "Yingxu"
     ]

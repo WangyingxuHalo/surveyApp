@@ -6,6 +6,8 @@ import {
   DeleteOutlined,
   EyeInvisibleOutlined,
   LockOutlined,
+  RedoOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import {
@@ -16,9 +18,10 @@ import {
   pasteComponent,
 } from "../../../store/componentsReducer";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
+import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 const EditToolbar: FC = () => {
-  const { selectedId, selectedComponent, copiedComponent } =
+  const { selectedId, selectedComponent, copiedComponent, canRedo, canUndo } =
     useGetComponentInfo();
   const { isLocked } = selectedComponent || {};
   const dispatch = useDispatch();
@@ -47,6 +50,16 @@ const EditToolbar: FC = () => {
   // paste component
   const handlePaste = () => {
     dispatch(pasteComponent());
+  };
+
+  // undo
+  const handleUndo = () => {
+    dispatch(UndoActionCreators.undo());
+  };
+
+  // redo
+  const handleRedo = () => {
+    dispatch(UndoActionCreators.redo());
   };
 
   return (
@@ -86,6 +99,22 @@ const EditToolbar: FC = () => {
           icon={<BlockOutlined />}
           onClick={handlePaste}
           disabled={copiedComponent == null}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="撤销">
+        <Button
+          shape="circle"
+          icon={<UndoOutlined />}
+          onClick={handleUndo}
+          disabled={!canRedo}
+        ></Button>
+      </Tooltip>
+      <Tooltip title="重做">
+        <Button
+          shape="circle"
+          icon={<RedoOutlined />}
+          onClick={handleRedo}
+          disabled={!canUndo}
         ></Button>
       </Tooltip>
     </Space>

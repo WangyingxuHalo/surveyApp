@@ -7,6 +7,7 @@ import {
   selectNextComponent,
 } from "../store/componentsReducer";
 import { useDispatch } from "react-redux";
+import { ActionCreators as UndoActionCreators } from "redux-undo";
 
 /**
  *
@@ -66,6 +67,28 @@ function useBindCanvasKeyPress() {
       return;
     }
     dispatch(selectNextComponent());
+  });
+
+  // undo
+  useKeyPress(
+    ["ctrl.z", "meta.z"],
+    () => {
+      if (!isActiveElementValid()) {
+        return;
+      }
+      dispatch(UndoActionCreators.undo());
+    },
+    {
+      exactMatch: true, // only ctrl + z. ctrl + shift + z won't trigger this
+    }
+  );
+
+  // redo
+  useKeyPress(["ctrl.shift.z", "meta.shift.z"], () => {
+    if (!isActiveElementValid()) {
+      return;
+    }
+    dispatch(UndoActionCreators.redo());
   });
 }
 
