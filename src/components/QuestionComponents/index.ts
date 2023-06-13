@@ -8,9 +8,13 @@ import QuestionInfoConf, { QuestionInfoPropsType } from "./QuestionInfo";
 import QuestionTextareaConf, {
   QuestionTextareaPropsType,
 } from "./QuestionTextarea";
-import QuestionRadioConf, { QuestionRadioPropsType } from "./QuestionRadio";
+import QuestionRadioConf, {
+  QuestionRadioPropsType,
+  QuestionRadioStatPropsType,
+} from "./QuestionRadio";
 import QuestionCheckboxConf, {
   QuestionCheckboxPropsType,
+  QuestionCheckboxStatPropsType,
 } from "./QuestionCheckbox";
 
 // props type of each component
@@ -22,6 +26,9 @@ export type ComponentPropsType = QuestionInputPropsType &
   QuestionRadioPropsType &
   QuestionCheckboxPropsType;
 
+export type ComponentStatPropsType = QuestionRadioStatPropsType &
+  QuestionCheckboxStatPropsType;
+
 // configuration for every component
 export type ComponentConfType = {
   title: string;
@@ -29,6 +36,7 @@ export type ComponentConfType = {
   Component: FC<ComponentPropsType>;
   defaultProps: ComponentPropsType;
   PropComponent: FC<ComponentPropsType>;
+  StatComponent?: FC<ComponentStatPropsType>;
 };
 
 // list that contains all components

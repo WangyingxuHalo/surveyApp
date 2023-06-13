@@ -29,7 +29,7 @@ function useLoadQuestionData() {
     if (!data) {
       return;
     }
-    const { title, desc, js, css, componentList } = data;
+    const { title, desc, js, css, componentList, isPublished = false } = data;
     let selectedId = "";
     if (componentList.length > 0) {
       selectedId = componentList[0].fe_id;
@@ -39,7 +39,7 @@ function useLoadQuestionData() {
       resetComponents({ componentList, selectedId, copiedComponent: null })
     );
     dispatch(UndoActionCreators.clearHistory());
-    dispatch(resetPageInfo({ title, desc, js, css }));
+    dispatch(resetPageInfo({ title, desc, js, css, isPublished }));
   }, [data]);
 
   // id changes => send ajax request to load survey data
