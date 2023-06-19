@@ -29,10 +29,10 @@ module.exports = {
       return webpackConfig;
     },
   },
-  devServer: {
-    port: 8000,
-    proxy: {
-      "/api": "http://localhost:3001",
-    },
-  },
+  // devServer: {
+  //   port: 8000,
+  //   proxy: {
+  //     "/api": "http://localhost:3001",
+  //   },
+  // },
 };

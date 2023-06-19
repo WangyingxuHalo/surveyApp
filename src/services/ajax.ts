@@ -9,7 +9,7 @@ const instance = axios.create({
 // request intercept: add token
 instance.interceptors.request.use(
   (config) => {
-    config.headers["Authorization"] = `Bearer ${getToken()}`;
+    config.headers["Authorization"] = `Basic ${getToken()}`;
     return config;
   },
   (error) => Promise.reject(error)
