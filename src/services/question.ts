@@ -33,12 +33,23 @@ export async function getQuestionListService(
   return data;
 }
 
-// Enable users to star a survey
+// Update simple information
 export async function updateQuestionService(
   id: string,
   opt: { [key: string]: any }
 ): Promise<ResDataType> {
   const url = `${HOST_ADDRESS}/api/question/${id}`;
+  const data = (await axios.patch(url, opt)) as ResDataType;
+  return data;
+}
+
+// Update simple information
+export async function saveQuestionService(
+  id: string,
+  opt: { [key: string]: any }
+): Promise<ResDataType> {
+  const url = `${HOST_ADDRESS}/api/question/save/${id}`;
+  console.log("opt: ", opt);
   const data = (await axios.patch(url, opt)) as ResDataType;
   return data;
 }

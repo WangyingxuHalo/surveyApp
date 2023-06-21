@@ -11,18 +11,25 @@ export type ComponentInfoType = {
   isHidden?: boolean;
   isLocked?: boolean;
   props: ComponentPropsType;
+  order: number;
 };
 
 export type ComponentStateType = {
   selectedId: string;
   componentList: Array<ComponentInfoType>;
   copiedComponent: ComponentInfoType | null;
+  createIds: Array<string>;
+  deleteIds: Array<string>;
+  isUserAction: boolean;
 };
 
 const INIT_STATE: ComponentStateType = {
   selectedId: "",
   componentList: [],
   copiedComponent: null,
+  createIds: [],
+  deleteIds: [],
+  isUserAction: false,
 };
 
 export const componentSlice = createSlice({
@@ -48,7 +55,9 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<ComponentInfoType>
     ) => {
+      state.isUserAction = true;
       const componentToAdd = action.payload;
+      state.createIds.push(componentToAdd.fe_id);
       const { selectedId, componentList } = state;
       const index = componentList.findIndex(
         (component) => component.fe_id === selectedId
@@ -69,6 +78,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
     ) => {
+      state.isUserAction = true;
       const { fe_id, newProps } = action.payload;
       const currComponent = state.componentList.find(
         (component) => component.fe_id === fe_id
@@ -82,12 +92,17 @@ export const componentSlice = createSlice({
     },
     // delete component
     deleteComponent: (state: ComponentStateType) => {
+      state.isUserAction = true;
       const { componentList, selectedId } = state;
       const componentIndex = componentList.findIndex(
         (component) => component.fe_id === selectedId
       );
       if (componentIndex === -1) {
         return;
+      }
+      // If it is a new created one, delete it in the createIds array
+      if (state.createIds.includes(selectedId)) {
+        state.createIds = state.createIds.filter((id) => id !== selectedId);
       }
       const newSelectedId = getNextSelectedId(selectedId, componentList);
       state.selectedId = newSelectedId;
@@ -98,6 +113,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string; isHidden: boolean }>
     ) => {
+      state.isUserAction = true;
       const { fe_id, isHidden } = action.payload;
       const { componentList } = state;
       const componentIdx = componentList.findIndex(
@@ -121,6 +137,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string }>
     ) => {
+      state.isUserAction = true;
       const { fe_id } = action.payload;
       const { componentList } = state;
       const componentToLock = componentList.find(
@@ -142,6 +159,7 @@ export const componentSlice = createSlice({
     },
     // paste component. Should change fe_id
     pasteComponent: (state: ComponentStateType) => {
+      state.isUserAction = true;
       const { selectedId, componentList, copiedComponent } = state;
       if (copiedComponent == null) {
         return;
@@ -201,6 +219,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string; newTitle: string }>
     ) => {
+      state.isUserAction = true;
       const { fe_id, newTitle } = action.payload;
       const { componentList } = state;
       const componentToChange = componentList.find(
@@ -215,11 +234,24 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ oldIndex: number; newIndex: number }>
     ) => {
+      state.isUserAction = true;
       const { componentList } = state;
       const { oldIndex, newIndex } = action.payload;
       const elementToMove = componentList[oldIndex];
       componentList.splice(oldIndex, 1);
       componentList.splice(newIndex, 0, elementToMove);
+    },
+    // reorder list component
+    reorderComponents: (
+      state: ComponentStateType,
+      action: PayloadAction<Array<ComponentInfoType>>
+    ) => {
+      state.isUserAction = false;
+      state.componentList = action.payload;
+    },
+    // clear createIds
+    clearCreateIds: (state: ComponentStateType) => {
+      state.createIds = [];
     },
   },
 });
@@ -238,6 +270,8 @@ export const {
   selectNextComponent,
   changeTitleName,
   moveComponentPosition,
+  reorderComponents,
+  clearCreateIds,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;

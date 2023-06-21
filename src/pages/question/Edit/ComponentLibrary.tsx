@@ -21,6 +21,7 @@ const genComponent = (c: ComponentConfType) => {
         title,
         type,
         props: defaultProps,
+        order: 0,
       })
     );
   };

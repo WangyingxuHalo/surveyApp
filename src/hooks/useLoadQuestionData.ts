@@ -36,7 +36,14 @@ function useLoadQuestionData() {
     }
 
     dispatch(
-      resetComponents({ componentList, selectedId, copiedComponent: null })
+      resetComponents({
+        componentList,
+        selectedId,
+        copiedComponent: null,
+        createIds: [],
+        deleteIds: [],
+        isUserAction: false,
+      })
     );
     dispatch(UndoActionCreators.clearHistory());
     dispatch(resetPageInfo({ title, desc, js, css, isPublished }));

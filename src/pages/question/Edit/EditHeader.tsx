@@ -6,11 +6,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import EditToolbar from "./EditToolbar";
 import useGetPageInfo from "../../../hooks/useGetPageInfo";
 import { changePageTitle } from "../../../store/pageInfoReducer";
+import {
+  reorderComponents,
+  clearCreateIds,
+} from "../../../store/componentsReducer";
 import { useDispatch } from "react-redux";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
-import { updateQuestionService } from "../../../services/question";
+import {
+  updateQuestionService,
+  saveQuestionService,
+} from "../../../services/question";
 import { useKeyPress, useRequest, useDebounceEffect } from "ahooks";
 import { QUESTION_STAT_PATHNAME } from "../../../router";
+import cloneDeep from "lodash.clonedeep";
 
 const { Title } = Typography;
 
@@ -54,17 +62,40 @@ const TitleElem: FC = () => {
 const SaveButton: FC = () => {
   const { id } = useParams();
   const pageInfo = useGetPageInfo();
-  const { componentList } = useGetComponentInfo();
+  const { createIds, componentList, deleteIds, isUserAction } =
+    useGetComponentInfo();
+  const dispatch = useDispatch();
 
   const { run: saveAction, loading } = useRequest(
     async () => {
       if (!id) {
         return;
       }
-      await updateQuestionService(id, { ...pageInfo, componentList });
+      const copiedComponentList = cloneDeep(componentList);
+      // // Re-organize their order
+      copiedComponentList.forEach((eachComp, index) => {
+        const { order } = eachComp;
+        if (order !== index) {
+          eachComp.order = index;
+        }
+      });
+
+      dispatch(reorderComponents(copiedComponentList));
+
+      const newIds = await saveQuestionService(id, {
+        ...pageInfo,
+        createIds,
+        componentList: copiedComponentList,
+        deleteIds,
+      });
+      return newIds;
     },
     {
       manual: true,
+      onSuccess(res) {
+        dispatch(clearCreateIds());
+        console.log("save successfully, delete all from createIds");
+      },
     }
   );
 
@@ -78,7 +109,9 @@ const SaveButton: FC = () => {
   // save automatically with debounce
   useDebounceEffect(
     () => {
-      saveAction();
+      if (isUserAction) {
+        saveAction();
+      }
     },
     [componentList, pageInfo],
     { wait: 1000 }

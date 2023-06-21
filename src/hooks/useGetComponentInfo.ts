@@ -12,7 +12,14 @@ function useGetComponentInfo() {
   ) as StateWithHistory<StateType>;
   const canRedo = past.length > 0;
   const canUndo = future.length > 0;
-  const { componentList = [], selectedId = "", copiedComponent } = components;
+  const {
+    componentList = [],
+    selectedId = "",
+    copiedComponent,
+    createIds,
+    deleteIds,
+    isUserAction,
+  } = components;
 
   const selectedComponent = componentList.find(
     (component) => component.fe_id === selectedId
@@ -23,6 +30,9 @@ function useGetComponentInfo() {
     selectedId,
     selectedComponent,
     copiedComponent,
+    createIds,
+    deleteIds,
+    isUserAction,
     canRedo,
     canUndo,
   };
