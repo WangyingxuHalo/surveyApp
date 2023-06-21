@@ -19,6 +19,7 @@ import {
 } from "../../../store/componentsReducer";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
 import { ActionCreators as UndoActionCreators } from "redux-undo";
+import { setIsUser } from "../../../store/userActionReducer";
 
 const EditToolbar: FC = () => {
   const { selectedId, selectedComponent, copiedComponent, canRedo, canUndo } =
@@ -28,6 +29,7 @@ const EditToolbar: FC = () => {
   // delete component
   const handleDelete = () => {
     dispatch(deleteComponent());
+    dispatch(setIsUser(true));
   };
 
   // hide component
@@ -35,6 +37,7 @@ const EditToolbar: FC = () => {
     dispatch(
       changeComponentHiddenStatus({ fe_id: selectedId, isHidden: true })
     );
+    dispatch(setIsUser(true));
   };
 
   // lock component
@@ -50,6 +53,7 @@ const EditToolbar: FC = () => {
   // paste component
   const handlePaste = () => {
     dispatch(pasteComponent());
+    dispatch(setIsUser(true));
   };
 
   // undo

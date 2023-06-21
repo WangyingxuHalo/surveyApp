@@ -55,7 +55,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<ComponentInfoType>
     ) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const componentToAdd = action.payload;
       state.createIds.push(componentToAdd.fe_id);
       const { selectedId, componentList } = state;
@@ -78,7 +78,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string; newProps: ComponentPropsType }>
     ) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const { fe_id, newProps } = action.payload;
       const currComponent = state.componentList.find(
         (component) => component.fe_id === fe_id
@@ -92,7 +92,7 @@ export const componentSlice = createSlice({
     },
     // delete component
     deleteComponent: (state: ComponentStateType) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const { componentList, selectedId } = state;
       const componentIndex = componentList.findIndex(
         (component) => component.fe_id === selectedId
@@ -100,6 +100,8 @@ export const componentSlice = createSlice({
       if (componentIndex === -1) {
         return;
       }
+      // If it is a valid delete
+      state.deleteIds.push(selectedId);
       // If it is a new created one, delete it in the createIds array
       if (state.createIds.includes(selectedId)) {
         state.createIds = state.createIds.filter((id) => id !== selectedId);
@@ -113,7 +115,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string; isHidden: boolean }>
     ) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const { fe_id, isHidden } = action.payload;
       const { componentList } = state;
       const componentIdx = componentList.findIndex(
@@ -159,7 +161,7 @@ export const componentSlice = createSlice({
     },
     // paste component. Should change fe_id
     pasteComponent: (state: ComponentStateType) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const { selectedId, componentList, copiedComponent } = state;
       if (copiedComponent == null) {
         return;
@@ -219,7 +221,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ fe_id: string; newTitle: string }>
     ) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const { fe_id, newTitle } = action.payload;
       const { componentList } = state;
       const componentToChange = componentList.find(
@@ -234,7 +236,7 @@ export const componentSlice = createSlice({
       state: ComponentStateType,
       action: PayloadAction<{ oldIndex: number; newIndex: number }>
     ) => {
-      state.isUserAction = true;
+      // state.isUserAction = true;
       const { componentList } = state;
       const { oldIndex, newIndex } = action.payload;
       const elementToMove = componentList[oldIndex];
@@ -250,8 +252,9 @@ export const componentSlice = createSlice({
       state.componentList = action.payload;
     },
     // clear createIds
-    clearCreateIds: (state: ComponentStateType) => {
+    clearCreateAndDeleteIds: (state: ComponentStateType) => {
       state.createIds = [];
+      state.deleteIds = [];
     },
   },
 });
@@ -271,7 +274,7 @@ export const {
   changeTitleName,
   moveComponentPosition,
   reorderComponents,
-  clearCreateIds,
+  clearCreateAndDeleteIds,
 } = componentSlice.actions;
 
 export default componentSlice.reducer;

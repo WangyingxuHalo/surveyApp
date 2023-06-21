@@ -6,6 +6,7 @@ import {
 } from "../../../components/QuestionComponents";
 import { useDispatch } from "react-redux";
 import { changeComponentProps } from "../../../store/componentsReducer";
+import { setIsUser } from "../../../store/userActionReducer";
 
 const NoProp: FC = () => {
   return <div style={{ textAlign: "center" }}>未选中组件</div>;
@@ -29,6 +30,7 @@ const ComponentProp: FC = () => {
     }
     const { fe_id } = selectedComponent;
     dispatch(changeComponentProps({ fe_id, newProps }));
+    dispatch(setIsUser(true));
   };
 
   const { PropComponent } = currConf;

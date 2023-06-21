@@ -8,6 +8,7 @@ import {
 } from "../store/componentsReducer";
 import { useDispatch } from "react-redux";
 import { ActionCreators as UndoActionCreators } from "redux-undo";
+import { setIsUser } from "../store/userActionReducer";
 
 /**
  *
@@ -35,6 +36,7 @@ function useBindCanvasKeyPress() {
       return;
     }
     dispatch(deleteComponent());
+    dispatch(setIsUser(true));
   });
 
   // copy
@@ -51,6 +53,7 @@ function useBindCanvasKeyPress() {
       return;
     }
     dispatch(pasteComponent());
+    dispatch(setIsUser(true));
   });
 
   // choose previous component

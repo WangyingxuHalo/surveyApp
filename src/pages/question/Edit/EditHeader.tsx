@@ -8,7 +8,7 @@ import useGetPageInfo from "../../../hooks/useGetPageInfo";
 import { changePageTitle } from "../../../store/pageInfoReducer";
 import {
   reorderComponents,
-  clearCreateIds,
+  clearCreateAndDeleteIds,
 } from "../../../store/componentsReducer";
 import { useDispatch } from "react-redux";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
@@ -19,6 +19,7 @@ import {
 import { useKeyPress, useRequest, useDebounceEffect } from "ahooks";
 import { QUESTION_STAT_PATHNAME } from "../../../router";
 import cloneDeep from "lodash.clonedeep";
+import { setIsUser } from "../../../store/userActionReducer";
 
 const { Title } = Typography;
 
@@ -33,6 +34,7 @@ const TitleElem: FC = () => {
       return;
     }
     dispatch(changePageTitle(newTitle));
+    dispatch(setIsUser(true));
   };
   return (
     <Space>
@@ -81,6 +83,7 @@ const SaveButton: FC = () => {
       });
 
       dispatch(reorderComponents(copiedComponentList));
+      dispatch(setIsUser(true));
 
       const newIds = await saveQuestionService(id, {
         ...pageInfo,
@@ -93,7 +96,7 @@ const SaveButton: FC = () => {
     {
       manual: true,
       onSuccess(res) {
-        dispatch(clearCreateIds());
+        dispatch(clearCreateAndDeleteIds());
         console.log("save successfully, delete all from createIds");
       },
     }
@@ -109,8 +112,12 @@ const SaveButton: FC = () => {
   // save automatically with debounce
   useDebounceEffect(
     () => {
+      console.log("want to save");
       if (isUserAction) {
         saveAction();
+        // after save successfully, set isUser to false
+        // to avoid trigger infinite loop
+        dispatch(setIsUser(false));
       }
     },
     [componentList, pageInfo],

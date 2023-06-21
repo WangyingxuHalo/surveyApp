@@ -7,6 +7,7 @@ import { Typography } from "antd";
 import styles from "./ComponentLibrary.module.scss";
 import { useDispatch } from "react-redux";
 import { addComponent } from "../../../store/componentsReducer";
+import { setIsUser } from "../../../store/userActionReducer";
 import { nanoid } from "nanoid";
 
 const { Title } = Typography;
@@ -24,6 +25,7 @@ const genComponent = (c: ComponentConfType) => {
         order: 0,
       })
     );
+    dispatch(setIsUser(true));
   };
 
   return (

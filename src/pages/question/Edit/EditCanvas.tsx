@@ -13,6 +13,7 @@ import classNames from "classnames";
 import useBindCanvasKeyPress from "../../../hooks/useBindCanvasKeyPress";
 import SortableContainer from "../../../components/DragSortable/SortableContainer";
 import SortableItem from "../../../components/DragSortable/SortableItem";
+import { setIsUser } from "../../../store/userActionReducer";
 
 type PropsType = {
   loading: boolean;
@@ -38,6 +39,7 @@ const EditCanvas: FC<PropsType> = ({ loading }) => {
 
   const handleDragEnd = (oldIndex: number, newIndex: number) => {
     dispatch(moveComponentPosition({ oldIndex, newIndex }));
+    dispatch(setIsUser(true));
   };
 
   useBindCanvasKeyPress();

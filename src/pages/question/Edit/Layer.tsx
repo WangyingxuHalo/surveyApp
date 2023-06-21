@@ -14,6 +14,7 @@ import { Input, message, Button, Space } from "antd";
 import { EyeInvisibleOutlined, LockOutlined } from "@ant-design/icons";
 import SortableContainer from "../../../components/DragSortable/SortableContainer";
 import SortableItem from "../../../components/DragSortable/SortableItem";
+import { setIsUser } from "../../../store/userActionReducer";
 
 const Layer: FC = () => {
   const [changingTitleId, setChangingTitleId] = useState("");
@@ -49,11 +50,13 @@ const Layer: FC = () => {
       return;
     }
     dispatch(changeTitleName({ fe_id: selectedId, newTitle: newValue }));
+    dispatch(setIsUser(true));
   };
 
   // change display or hidden
   const handleChangeHidden = (fe_id: string, isHidden: boolean) => {
     dispatch(changeComponentHiddenStatus({ fe_id, isHidden }));
+    dispatch(setIsUser(true));
   };
 
   // change lock or unlock
@@ -68,6 +71,7 @@ const Layer: FC = () => {
 
   const handleDragEnd = (oldIndex: number, newIndex: number) => {
     dispatch(moveComponentPosition({ oldIndex, newIndex }));
+    dispatch(setIsUser(true));
   };
 
   return (

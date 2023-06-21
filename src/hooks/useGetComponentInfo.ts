@@ -2,11 +2,15 @@ import { useSelector } from "react-redux";
 import { StateType } from "../store";
 import { ComponentStateType } from "../store/componentsReducer";
 import { StateWithHistory } from "redux-undo";
+import { UserActionStateType } from "../store/userActionReducer";
 
 function useGetComponentInfo() {
   const components = useSelector<StateType>(
     (state) => state.component.present
   ) as ComponentStateType;
+  const { isUser } = useSelector<StateType>(
+    (state) => state.userAction
+  ) as UserActionStateType;
   const { past, future } = useSelector<StateType>(
     (state) => state.component
   ) as StateWithHistory<StateType>;
@@ -18,7 +22,6 @@ function useGetComponentInfo() {
     copiedComponent,
     createIds,
     deleteIds,
-    isUserAction,
   } = components;
 
   const selectedComponent = componentList.find(
@@ -32,7 +35,7 @@ function useGetComponentInfo() {
     copiedComponent,
     createIds,
     deleteIds,
-    isUserAction,
+    isUserAction: isUser,
     canRedo,
     canUndo,
   };

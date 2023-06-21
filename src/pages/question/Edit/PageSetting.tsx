@@ -3,6 +3,7 @@ import React, { FC, useEffect } from "react";
 import useGetPageInfo from "../../../hooks/useGetPageInfo";
 import { useDispatch } from "react-redux";
 import { resetPageInfo } from "../../../store/pageInfoReducer";
+import { setIsUser } from "../../../store/userActionReducer";
 
 const { TextArea } = Input;
 
@@ -13,6 +14,7 @@ const PageSetting: FC = () => {
 
   const handleValuesChange = () => {
     dispatch(resetPageInfo(form.getFieldsValue()));
+    dispatch(setIsUser(true));
   };
 
   useEffect(() => {

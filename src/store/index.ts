@@ -3,12 +3,14 @@ import userReducer, { UserStateType } from "./userReducer";
 import componentsReducer, { ComponentStateType } from "./componentsReducer";
 import pageInfoReducer, { PageInfoType } from "./pageInfoReducer";
 import undoable, { excludeAction, StateWithHistory } from "redux-undo";
+import userActionReducer, { UserActionStateType } from "./userActionReducer";
 
 export type StateType = {
   user: UserStateType;
   // component: ComponentStateType;
   component: StateWithHistory<ComponentStateType>; // add undo
   pageInfo: PageInfoType;
+  userAction: UserActionStateType;
 };
 
 export default configureStore({
@@ -28,5 +30,6 @@ export default configureStore({
     }),
     // store page info
     pageInfo: pageInfoReducer,
+    userAction: userActionReducer,
   },
 });
