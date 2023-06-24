@@ -1,22 +1,13 @@
-import React, { FC, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { FC } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Typography } from "antd";
 import { LIST_PATHNAME } from "../router";
 import styles from "./Home.module.scss";
-import { HOST_ADDRESS } from "../constant";
-
-import axios from "axios";
 
 const { Title, Paragraph } = Typography;
 
 const Home: FC = () => {
   const nav = useNavigate();
-
-  // useEffect(() => {
-  //   fetch(`${HOST_ADDRESS}/api/test`)
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data));
-  // }, []);
 
   const handleGoToList = () => {
     nav(LIST_PATHNAME);

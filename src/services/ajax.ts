@@ -2,9 +2,7 @@ import axios from "axios";
 import { message } from "antd";
 import { getToken } from "../utils/user-token";
 
-const instance = axios.create({
-  timeout: 10 * 1000,
-});
+const instance = axios.create();
 
 // request intercept: add token
 instance.interceptors.request.use(
@@ -28,6 +26,7 @@ instance.interceptors.response.use((res) => {
     throw new Error(msg);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return data as any;
 });
 
@@ -40,5 +39,6 @@ export type ResType = {
 };
 
 export type ResDataType = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 };

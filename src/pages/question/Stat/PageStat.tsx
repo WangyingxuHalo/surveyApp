@@ -1,6 +1,9 @@
 import { useRequest } from "ahooks";
 import React, { FC, useState } from "react";
-import { getQuestionListService } from "../../../services/stat";
+import {
+  getQuestionListInStatService,
+  getQuestionListService,
+} from "../../../services/stat";
 import { useParams } from "react-router-dom";
 import { Form, Spin, Typography, Table, Pagination } from "antd";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
@@ -29,6 +32,7 @@ const PageStat: FC<PropsType> = (props: PropsType) => {
   const { componentList } = useGetComponentInfo();
   const columns = componentList.map((c) => {
     const { fe_id, title, props = {}, type } = c;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const colTitle = props!.title || title;
     return {
       title: (
@@ -53,6 +57,7 @@ const PageStat: FC<PropsType> = (props: PropsType) => {
   });
 
   // Data source used requires a unique key
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dataSource = list.map((data: any) => ({ ...data, key: data._id }));
   const TableElem = (
     <>
@@ -78,13 +83,14 @@ const PageStat: FC<PropsType> = (props: PropsType) => {
 
   const { loading } = useRequest(
     async () => {
-      const res = await getQuestionListService(id, { page, pageSize });
+      const res = await getQuestionListInStatService(id, { page, pageSize });
       return res;
     },
     {
       refreshDeps: [id, page, pageSize],
       onSuccess(res) {
-        const { total, list } = res;
+        console.log("res: ", res);
+        const { total, list = [] } = res;
         setTotal(total);
         setList(list);
       },

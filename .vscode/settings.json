@@ -7,6 +7,8 @@
         "antd",
         "Appstore",
         "clonedeep",
+        "commitlint",
+        "craco",
         "downarrow",
         "immer",
         "mockjs",

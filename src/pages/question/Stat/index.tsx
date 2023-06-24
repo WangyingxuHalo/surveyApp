@@ -11,7 +11,7 @@ import ChartStat from "./ChartStat";
 
 const Stat: FC = () => {
   const { loading } = useLoadQuestionData();
-  const { title, desc, js, css, isPublished } = useGetPageInfo();
+  const { isPublished } = useGetPageInfo();
   const nav = useNavigate();
 
   // 状态提升

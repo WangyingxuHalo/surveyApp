@@ -1,13 +1,8 @@
-import React, { FC, MouseEvent } from "react";
+import React, { FC } from "react";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
-import { Spin } from "antd";
 import styles from "./LeftPanel.module.scss";
 import classNames from "classnames";
-import {
-  ComponentInfoType,
-  changeSelectedId,
-} from "../../../store/componentsReducer";
-import { useDispatch } from "react-redux";
+import { ComponentInfoType } from "../../../store/componentsReducer";
 import { getComponentConfByType } from "../../../components/QuestionComponents";
 
 type PropsType = {
@@ -42,7 +37,7 @@ const LeftPanel: FC<PropsType> = (props: PropsType) => {
       {componentList
         .filter((each) => !each.isHidden)
         .map((component, index) => {
-          const { fe_id, type, title, isHidden, isLocked, props } = component;
+          const { fe_id, type } = component;
           const wrapperDefaultClassName = styles["component-wrapper"];
           const selectedClassName = styles.selected;
           const wrapperClassName = classNames({

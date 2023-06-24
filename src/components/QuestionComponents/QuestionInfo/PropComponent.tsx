@@ -15,7 +15,6 @@ const PropComponent: FC<QuestionInfoPropsType> = (
   }, [title, description]);
 
   const handleValuesChange = () => {
-    console.log(form.getFieldsValue());
     if (onChange) {
       onChange(form.getFieldsValue());
     }

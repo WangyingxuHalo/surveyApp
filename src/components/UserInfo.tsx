@@ -1,7 +1,5 @@
 import React, { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getUserInfoService } from "../services/user";
-import { useRequest } from "ahooks";
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Space, message } from "antd";
 import { removeToken } from "../utils/user-token";

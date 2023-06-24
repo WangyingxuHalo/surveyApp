@@ -43,6 +43,7 @@ const EditToolbar: FC = () => {
   // lock component
   const handleLock = () => {
     dispatch(toggleComponentLocked({ fe_id: selectedId }));
+    dispatch(setIsUser(true));
   };
 
   // copy component

@@ -36,6 +36,7 @@ export async function getQuestionListService(
 // Update simple information
 export async function updateQuestionService(
   id: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   opt: { [key: string]: any }
 ): Promise<ResDataType> {
   const url = `${HOST_ADDRESS}/api/question/${id}`;
@@ -46,10 +47,10 @@ export async function updateQuestionService(
 // Update simple information
 export async function saveQuestionService(
   id: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   opt: { [key: string]: any }
 ): Promise<ResDataType> {
   const url = `${HOST_ADDRESS}/api/question/save/${id}`;
-  console.log("opt: ", opt);
   const data = (await axios.patch(url, opt)) as ResDataType;
   return data;
 }
@@ -67,7 +68,7 @@ export async function duplicateQuestionService(
 export async function deleteQuestionService(
   ids: string[]
 ): Promise<ResDataType> {
-  const url = "${HOST_ADDRESS}/api/question";
-  const data = (await axios.delete(url), { data: ids }) as ResDataType;
+  const url = `${HOST_ADDRESS}/api/question`;
+  const data = (await axios.delete(url, { data: ids })) as ResDataType;
   return data;
 }

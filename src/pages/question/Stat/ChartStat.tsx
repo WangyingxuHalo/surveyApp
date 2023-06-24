@@ -1,7 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { Typography } from "antd";
-import PieDemo from "./PieDemo";
-import BarDemo from "./BarDemo";
 import { getComponentStatService } from "../../../services/stat";
 import { useRequest } from "ahooks";
 import { useParams } from "react-router-dom";
@@ -19,19 +17,26 @@ const ChartStat: FC<PropsType> = (props: PropsType) => {
   const { id = "" } = useParams();
   const [statData, setStatData] = useState([]);
   const { run } = useRequest(
-    async (id, selectedComponentId) =>
-      await getComponentStatService(id, selectedComponentId),
+    async (id, selectedComponentId, selectedComponentType) =>
+      await getComponentStatService(
+        id,
+        selectedComponentId,
+        selectedComponentType
+      ),
     {
       manual: true,
       onSuccess(res) {
+        console.log(res);
         setStatData(res.stat);
       },
     }
   );
 
   useEffect(() => {
-    run(id, selectedComponentId);
-  }, [id, selectedComponentId]);
+    if (id && selectedComponentId && selectedComponentType) {
+      run(id, selectedComponentId, selectedComponentType);
+    }
+  }, [id, selectedComponentId, selectedComponentType]);
 
   function genStatElem(type: string) {
     if (!selectedComponentId) return <div>未选中组件</div>;

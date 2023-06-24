@@ -18,10 +18,10 @@ import QRCode from "qrcode.react";
 
 const { Title } = Typography;
 
-const StatHeader = () => {
+const StatHeader: FC = () => {
   const nav = useNavigate();
   const { id } = useParams();
-  const { title, isPublished } = useGetPageInfo();
+  const { isPublished } = useGetPageInfo();
 
   const urlInputRef = useRef<InputRef>(null);
 

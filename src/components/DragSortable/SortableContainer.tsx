@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import {
   DndContext,
   closestCenter,
@@ -15,6 +15,7 @@ import {
 
 type PropsType = {
   children: JSX.Element | JSX.Element[]; //被SortableContainer包裹起来的元素
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items: Array<{ id: string; [key: string]: any }>;
   onDragEnd: (oldIndex: number, newIndex: number) => void;
 };

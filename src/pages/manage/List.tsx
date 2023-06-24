@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useEffect, useState, useRef } from "react";
 import styles from "./Common.module.scss";
 import QuestionCard from "../../components/QuestionCard";

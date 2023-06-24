@@ -11,7 +11,7 @@ import {
 import styles from "./Register.module.scss";
 import { UserAddOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
-import { LIST_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME } from "../router";
+import { LIST_PATHNAME, REGISTER_PATHNAME } from "../router";
 import { useRequest } from "ahooks";
 import { loginService } from "../services/user";
 import { setToken } from "../utils/user-token";
@@ -50,7 +50,6 @@ const Login: FC = () => {
     {
       manual: true,
       onSuccess(result) {
-        console.log("result: ", result);
         const { token = "" } = result;
         setToken(token);
         message.success("登录成功");
@@ -64,6 +63,7 @@ const Login: FC = () => {
     form.setFieldsValue({ username, password });
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (values: any) => {
     const { username, password, remember } = values || {};
     if (remember) {
@@ -74,8 +74,8 @@ const Login: FC = () => {
     loginSubmit(username, password);
   };
 
-  const onSubmitFailed = (values: any) => {
-    console.log("failed: ", values);
+  const onSubmitFailed = () => {
+    alert("failed");
   };
 
   return (

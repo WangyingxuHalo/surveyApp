@@ -1,13 +1,5 @@
 import React, { FC } from "react";
-import {
-  Space,
-  Typography,
-  Form,
-  Input,
-  Checkbox,
-  Button,
-  message,
-} from "antd";
+import { Space, Typography, Form, Input, Button, message } from "antd";
 import styles from "./Register.module.scss";
 import { UserAddOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,12 +25,13 @@ const Register: FC = () => {
     }
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (values: any) => {
     registerSubmit(values);
   };
 
-  const onSubmitFailed = (values: any) => {
-    console.log("failed: ", values);
+  const onSubmitFailed = () => {
+    alert("failed");
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { Button, Space, Divider, message } from "antd";
 import { useRequest } from "ahooks";
@@ -15,11 +15,7 @@ import { createQuestionService } from "../services/question";
 const ManageLayout: FC = () => {
   const nav = useNavigate();
   const { pathname } = useLocation();
-  const {
-    loading,
-    run: handleCreateNew,
-    error,
-  } = useRequest(createQuestionService, {
+  const { loading, run: handleCreateNew } = useRequest(createQuestionService, {
     manual: true,
     onSuccess(result) {
       message.success("创建成功");

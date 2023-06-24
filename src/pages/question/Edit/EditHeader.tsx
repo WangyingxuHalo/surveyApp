@@ -95,9 +95,8 @@ const SaveButton: FC = () => {
     },
     {
       manual: true,
-      onSuccess(res) {
+      onSuccess() {
         dispatch(clearCreateAndDeleteIds());
-        console.log("save successfully, delete all from createIds");
       },
     }
   );
@@ -112,7 +111,6 @@ const SaveButton: FC = () => {
   // save automatically with debounce
   useDebounceEffect(
     () => {
-      console.log("want to save");
       if (isUserAction) {
         saveAction();
         // after save successfully, set isUser to false
@@ -138,6 +136,7 @@ const SaveButton: FC = () => {
 const PublishButton: FC = () => {
   const { id } = useParams();
   const pageInfo = useGetPageInfo();
+  const { isPublished = false } = pageInfo;
   const { componentList } = useGetComponentInfo();
   const nav = useNavigate();
 
@@ -161,14 +160,25 @@ const PublishButton: FC = () => {
     }
   );
   return (
-    <Button
-      type="primary"
-      disabled={loading}
-      icon={loading ? <LoadingOutlined /> : null}
-      onClick={publishAction}
-    >
-      发布
-    </Button>
+    <div>
+      {isPublished ? (
+        <Button
+          type="primary"
+          onClick={() => nav(`${QUESTION_STAT_PATHNAME}/${id}`)}
+        >
+          问卷统计页面
+        </Button>
+      ) : (
+        <Button
+          type="primary"
+          disabled={loading}
+          icon={loading ? <LoadingOutlined /> : null}
+          onClick={publishAction}
+        >
+          发布
+        </Button>
+      )}
+    </div>
   );
 };
 

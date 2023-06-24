@@ -17,10 +17,10 @@ function useLoadUserData() {
   const { run } = useRequest(getUserInfoService, {
     manual: true,
     onSuccess(result) {
-      console.log("success: ", result);
       const { username, nickname } = result;
       dispatch(loginReducer({ username, nickname }));
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError(error: any) {
       if (error.response && error.response.status === 401) {
         message.error(`${error.response.data.msg},返回登录页`);
@@ -36,7 +36,6 @@ function useLoadUserData() {
   const { username } = useGetUserInfo();
 
   useEffect(() => {
-    console.log("user name change");
     if (username) {
       setWaitingUserData(false);
       return;

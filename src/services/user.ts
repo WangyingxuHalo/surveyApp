@@ -17,7 +17,6 @@ export async function registerService(
   const url = `${HOST_ADDRESS}/api/user/register`;
   const body = { username, password, nickname: nickname || username };
   const data = (await axios.post(url, body)) as ResDataType;
-  console.log("inside register, data: ", data);
   return data;
 }
 

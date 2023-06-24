@@ -9,7 +9,7 @@ import RightPanel from "./RightPanel";
 import EditHeader from "./EditHeader";
 
 const Edit: FC = () => {
-  const { loading, error } = useLoadQuestionData();
+  const { loading } = useLoadQuestionData();
   const dispatch = useDispatch();
 
   const handleCancelFocus = () => {

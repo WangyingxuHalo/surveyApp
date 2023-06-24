@@ -10,12 +10,7 @@ const { Paragraph } = Typography;
 const Component: FC<QuestionParagraphPropsType> = (
   props: QuestionParagraphPropsType
 ) => {
-  const {
-    text = "",
-    isCenter = false,
-    onChange,
-    disabled,
-  } = {
+  const { text = "", isCenter = false } = {
     ...QuestionParagraphDefaultProps,
     ...props,
   };
