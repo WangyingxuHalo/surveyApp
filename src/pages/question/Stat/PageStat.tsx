@@ -1,9 +1,6 @@
 import { useRequest } from "ahooks";
 import React, { FC, useState } from "react";
-import {
-  getQuestionListInStatService,
-  getQuestionListService,
-} from "../../../services/stat";
+import { getQuestionListInStatService } from "../../../services/stat";
 import { useParams } from "react-router-dom";
 import { Form, Spin, Typography, Table, Pagination } from "antd";
 import useGetComponentInfo from "../../../hooks/useGetComponentInfo";
