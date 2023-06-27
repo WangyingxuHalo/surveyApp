@@ -36,7 +36,7 @@ const StatHeader: FC = () => {
 
   function genLinkAndQRCodeElem() {
     if (!isPublished) return null;
-    const url = `http://localhost:3000/question/${id}`;
+    const url = `https://mysurvey.wwwyxxx.uk/question/${id}`;
 
     const QRCodeElem = (
       <div style={{ textAlign: "center" }}>
