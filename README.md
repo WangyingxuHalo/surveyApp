@@ -1,5 +1,5 @@
 # 问卷管理系统前端
-
+![home page](https://github.com/WangyingxuHalo/surveyApp/assets/40592903/20177953-6c39-4557-a2a2-de49b96b2eb0)
 项目的live demo在 https://mysurvey.wwwyxxx.uk  
 
 
