@@ -1,46 +1,27 @@
-# Getting Started with Create React App
+# 问卷管理系统前端
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+项目的live demo在 https://mysurvey.wwwyxxx.uk
 
-## Available Scripts
 
-In the project directory, you can run:
+本仓库为问卷管理系统b端的前端代码的仓库。
+包括: 用户注册，用户登录，问卷列表，星标列表，回收站，问卷编辑，问卷发布，答卷统计，答卷数据可视化。
 
-### `npm start`
+#
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+剩下的两个仓库在
 
-### `npm test`
+1）Survey-Backend: https://github.com/WangyingxuHalo/Survey-Backend
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2）Survey-Client: https://github.com/WangyingxuHalo/Survey-Client
 
-### `npm run build`
+  # 技术栈
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+使用React.js, TypeScript, Antd来实现所有的页面。
+使用Redux管理数据。
+使用部分ahooks定义好的hooks比如useRequest, useDebounce等。
+使用Recharts来可视化答卷数据。
+使用dnd kit实现问卷列表的拖拽排序。
+自定义封装多个组件比如问卷里的输入框，标题，段落组件及其属性组件，避免代码的重复性
+自定义定义hooks，比如useLoadUserInfo, useLoadPageInfo, useGetUserInfo等
