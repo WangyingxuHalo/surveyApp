@@ -21,7 +21,7 @@ const { Title } = Typography;
 const StatHeader: FC = () => {
   const nav = useNavigate();
   const { id } = useParams();
-  const { isPublished } = useGetPageInfo();
+  const { title, isPublished } = useGetPageInfo();
 
   const urlInputRef = useRef<InputRef>(null);
 
@@ -63,7 +63,7 @@ const StatHeader: FC = () => {
             <Button type="link" icon={<LeftOutlined />} onClick={() => nav(-1)}>
               返回
             </Button>
-            <Title>标题</Title>
+            <Title>{title}</Title>
           </Space>
         </div>
         <div className={styles.main}>{genLinkAndQRCodeElem()}</div>
