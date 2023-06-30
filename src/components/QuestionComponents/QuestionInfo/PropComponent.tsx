@@ -7,7 +7,7 @@ const { TextArea } = Input;
 const PropComponent: FC<QuestionInfoPropsType> = (
   props: QuestionInfoPropsType
 ) => {
-  const { title, description, onChange } = props;
+  const { title, description, onChange, disabled = false } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -25,6 +25,7 @@ const PropComponent: FC<QuestionInfoPropsType> = (
       initialValues={{ title, description }}
       onValuesChange={handleValuesChange}
       form={form}
+      disabled={disabled}
     >
       <Form.Item
         label="标题"

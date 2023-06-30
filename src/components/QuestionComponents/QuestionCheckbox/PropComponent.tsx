@@ -9,7 +9,7 @@ const PropComponent: FC<QuestionCheckboxPropsType> = (
   props: QuestionCheckboxPropsType
 ) => {
   const [form] = Form.useForm();
-  const { title, isVertical, list, onChange } = props;
+  const { title, isVertical, list, onChange, disabled = false } = props;
 
   const handleValuesChange = () => {
     if (onChange) {
@@ -34,6 +34,7 @@ const PropComponent: FC<QuestionCheckboxPropsType> = (
       layout="vertical"
       onValuesChange={handleValuesChange}
       initialValues={{ title, isVertical, list }}
+      disabled={disabled}
     >
       <Form.Item
         label="标题"
